@@ -1,0 +1,15 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+
+     function isOwnerLoggedIn() {
+      return resource.data.userUID == request.auth.uid || request.resource.data.userUID == request.auth.uid;
+    }
+
+    match /users/{user} {
+      allow read, write, create, delete: if isOwnerOrTopAdmin();
+    }
+  }
+}
