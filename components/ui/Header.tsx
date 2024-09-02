@@ -7,7 +7,7 @@ import { useAuth } from '../useAuth';
 const Header = () => {
     const auth = useAuth();
 
-    if (auth.type !== LoadingStateTypes.LOADED || auth.user.phoneNumber == null) return null;
+    if (auth.type !== LoadingStateTypes.LOADED || auth.user.phoneNumber == null || auth.user.email == null) return null;
 
     return (
         <div className="flex flex-col">

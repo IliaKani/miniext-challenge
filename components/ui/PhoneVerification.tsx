@@ -4,7 +4,7 @@ import { firebaseAuth } from '@/components/firebase/firebaseAuth';
 import { useEffect, useState } from 'react';
 import Modal from '@/components/ui/Modal';
 import { useRouter } from 'next/navigation';
-import ToastBox from '@/components/ui/ToastBox';
+import ToastBox from './ToastBox';
 import { useAppDispatch } from '@/components/redux/store';
 import { showToast } from '@/components/redux/toast/toastSlice';
 import Input from '@/components/ui/Input';
@@ -61,6 +61,7 @@ const PhoneVerification = () => {
         if (auth.type !== LoadingStateTypes.LOADED) return;
         dispatch(
             verifyPhoneNumber({
+                type: "login",
                 auth,
                 OTPCode,
                 verificationId,
@@ -109,7 +110,7 @@ const PhoneVerification = () => {
                         alt="Workflow"
                     />
                     <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
-                        Sign in to your account
+                        Link phone number to your account
                     </h2>
                 </div>
 
