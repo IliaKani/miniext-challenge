@@ -1,6 +1,6 @@
 # miniExtensions Team Test Assignment
 
-## Project Description
+## Description
 
 This project is a test assignment from the miniExtensions team. The challenge is to implement a user authentication system that allows users to sign up and log in using their email, Google OAuth2, or phone number. The application must always have the user's email and phone number.
 
