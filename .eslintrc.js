@@ -25,5 +25,6 @@ module.exports = {
         'no-eq-null': 'off',
         eqeqeq: ['error', 'always', { null: 'ignore' }],
         '@typescript-eslint/no-explicit-any': 'off',
+        "@typescript-eslint/no-unused-vars": "off",
     },
 };
