@@ -27,10 +27,13 @@ The solution is written to fit with the style of the initial codebase, with some
    - Google
 3. Clone this repository.
 4. Install the dependencies with `npm install`.
-5. Copy the file `.env.template` and rename it to `.env`.
-6. Replace all "FILL_ME_IN" with an actual value. You can find these values for your Firebase project under "Project Settings" > "General" > "Your apps".
-7. Update the "FILL_ME_IN" value in the file `scripts/dev.sh` line 20 with the proper value. The proper value is the project name you gave your project in Firebase.
-8. Update the "FILL_ME_IN" value in the file `.firebaserc` line 3 with the proper value. This value must be the same as the "default bucket" value you put in the `.env` file.
-9. Login to Firebase using the CLI by running `firebase login`.
-10. Run the development instance with `npm run dev`.
-11. Access the website at http://localhost:3000.
+5. Create a new file named `.env` in your project root.
+6. Add your Firebase configuration to this file. Replace all "FILL_ME_IN" with an actual value. You can find these values for your Firebase project under "Project Settings" > "General" > "Your apps". The configuration should look like this:
+
+```env
+REACT_APP_API_KEY=FILL_ME_IN
+REACT_APP_AUTH_DOMAIN=FILL_ME_IN
+REACT_APP_PROJECT_ID=FILL_ME_IN
+REACT_APP_STORAGE_BUCKET=FILL_ME_IN
+REACT_APP_MESSAGING_SENDER_ID=FILL_ME_IN
+REACT_APP_APP_ID=FILL_ME_IN
