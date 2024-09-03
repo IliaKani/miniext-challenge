@@ -1,5 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateEmail, updatePassword } from 'firebase/auth';
+import {
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    updateEmail,
+    updatePassword,
+} from 'firebase/auth';
 import { firebaseAuth } from '@/components/firebase/firebaseAuth';
 import { getFriendlyMessageFromFirebaseErrorCode } from './helpers';
 import { showToast } from '../toast/toastSlice';
@@ -12,21 +17,28 @@ import { AuthContextType } from '@/components/useAuth';
 const ACTION_TYPE = {
     LOGIN: 'login',
     SIGN_UP: 'sign-up',
-    LINK: 'link'
+    LINK: 'link',
 };
 
 export const loginWithEmail = createAsyncThunk(
     'loginEmail',
- async (args: { type: typeof ACTION_TYPE[keyof typeof ACTION_TYPE]; auth: AuthContextType | null; email: string; password: string;
-    callback: (
-        args:
-            | { type: 'success'; }
-            | {
-                  type: 'error';
-                  message: string;
-              }
-    ) => void,
-}, { dispatch }) => {
+    async (
+        args: {
+            type: (typeof ACTION_TYPE)[keyof typeof ACTION_TYPE];
+            auth: AuthContextType | null;
+            email: string;
+            password: string;
+            callback: (
+                args:
+                    | { type: 'success' }
+                    | {
+                          type: 'error';
+                          message: string;
+                      }
+            ) => void;
+        },
+        { dispatch }
+    ) => {
         try {
             if (!isEmail(args.email)) {
                 dispatch(
@@ -47,24 +59,27 @@ export const loginWithEmail = createAsyncThunk(
                 return;
             }
 
-             // Handle login action
+            // Handle login action
             if (args.type === ACTION_TYPE.SIGN_UP) {
                 await createUserWithEmailAndPassword(firebaseAuth, args.email, args.password);
                 args.callback && args.callback({ type: 'success' });
             }
-              // Handle link action
-            if (args.type === ACTION_TYPE.LINK && args.auth?.type === LoadingStateTypes.LOADED && args.auth?.user){
+            // Handle link action
+            if (
+                args.type === ACTION_TYPE.LINK &&
+                args.auth?.type === LoadingStateTypes.LOADED &&
+                args.auth?.user
+            ) {
+                await updatePassword(args.auth.user, args.password);
+                await updateEmail(args.auth.user, args.email);
 
-                    await updatePassword(args.auth.user, args.password);
-                    await updateEmail(args.auth.user, args.email);
-
-                    dispatch(
-                        showToast({
-                            message: 'Email и пароль успешно связаны',
-                            type: 'success',
-                        })
-                    );
-                    args.callback && args.callback({ type: 'success' });
+                dispatch(
+                    showToast({
+                        message: 'Email и пароль успешно связаны',
+                        type: 'success',
+                    })
+                );
+                args.callback && args.callback({ type: 'success' });
             }
 
             if (args.type === ACTION_TYPE.LOGIN) {
@@ -77,10 +92,11 @@ export const loginWithEmail = createAsyncThunk(
                     type: 'error',
                 })
             );
-            args.callback && args.callback({
-                type: 'error',
-                message: getFriendlyMessageFromFirebaseErrorCode(e.code),
-            });
+            args.callback &&
+                args.callback({
+                    type: 'error',
+                    message: getFriendlyMessageFromFirebaseErrorCode(e.code),
+                });
         }
     }
 );

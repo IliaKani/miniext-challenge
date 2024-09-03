@@ -34,7 +34,7 @@ const LinkGoogleAccount = () => {
             await linkWithPopup(firebaseAuth.currentUser, googleAuthProvider);
         } catch (error) {
             // Log error
-            console.error("Error linking with Google: ", error);
+            console.error('Error linking with Google: ', error);
         }
 
         // Reload router

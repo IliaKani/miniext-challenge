@@ -61,7 +61,7 @@ const PhoneVerification = () => {
         if (auth.type !== LoadingStateTypes.LOADED) return;
         dispatch(
             verifyPhoneNumber({
-                type: "login",
+                type: 'login',
                 auth,
                 OTPCode,
                 verificationId,

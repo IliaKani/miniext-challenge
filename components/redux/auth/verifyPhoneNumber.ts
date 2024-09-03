@@ -91,10 +91,10 @@ export const verifyPhoneNumber = createAsyncThunk(
     'verifyPhoneNumber',
     async (
         args: {
-            type: 'login' | 'sign-up',
-            OTPCode: string,
-            auth: AuthContextType | null,
-            verificationId: string,
+            type: 'login' | 'sign-up';
+            OTPCode: string;
+            auth: AuthContextType | null;
+            verificationId: string;
             callback: (
                 args:
                     | { type: 'success' }

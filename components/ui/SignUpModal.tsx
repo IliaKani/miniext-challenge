@@ -5,7 +5,10 @@ import LoadingButton from './LoadingButton';
 import LoginWithGoogleButton from './LoginWithGoogleButton';
 import Input from './Input';
 import { isEmail, isMobilePhone } from 'validator';
-import { loginWithPhoneNumber, useIsLoginWithPhoneNumberLoading } from '../redux/auth/loginWithPhoneNumber';
+import {
+    loginWithPhoneNumber,
+    useIsLoginWithPhoneNumberLoading,
+} from '../redux/auth/loginWithPhoneNumber';
 import { loginWithEmail, useIsLoginWithEmailLoading } from '../redux/auth/loginWithEmail';
 import { RecaptchaVerifier } from 'firebase/auth';
 import { firebaseAuth } from '@/components/firebase/firebaseAuth';
@@ -93,7 +96,7 @@ const SignUpModal = (props: SignUpModalProps) => {
                 password,
                 callback: (result) => {
                     if (result.type === 'error') {
-                       return;
+                        return;
                     }
                 },
             })

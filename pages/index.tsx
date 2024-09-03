@@ -64,49 +64,43 @@ export function Home() {
                     className={styles.card}
                 >
                     <h3>Serverless Function &rarr;</h3>
-                    <p>
-                        Running code on-demand without needing to manage your own
-                        infrastructure.
-                    </p>
+                    <p>Running code on-demand without needing to manage your own infrastructure.</p>
                 </a>
                 <a
                     href="https://vercel.com/docs/concepts/functions/edge-functions"
                     className={styles.card}
                 >
                     <h3>Edge Function &rarr;</h3>
-                    <p>
-                        Deliver dynamic, personalized content with the lightweight Edge
-                        Runtime.
-                    </p>
+                    <p>Deliver dynamic, personalized content with the lightweight Edge Runtime.</p>
                 </a>
                 <Logout />
             </div>
         </main>
-    )
+    );
 
     // If the auth state is loaded and the user is not null
     if (auth.type === LoadingStateTypes.LOADED && auth.user != null) {
-      // If the user's phone number is null, display the PhoneVerification component
-      if (auth.user.phoneNumber == null) data = (<PhoneVerification />);
-      // If the user's email is null, display the EmailVerification component
-      if (auth.user.email == null) data = (<EmailVerification />);
-  }
+        // If the user's phone number is null, display the PhoneVerification component
+        if (auth.user.phoneNumber == null) data = <PhoneVerification />;
+        // If the user's email is null, display the EmailVerification component
+        if (auth.user.email == null) data = <EmailVerification />;
+    }
 
-  return (
-      <div className={styles.container}>
-          <Head>
-              <title>Create Next App</title>
-              <link rel="icon" href="/favicon.ico" />
-          </Head>
-          {data}
-      </div>
-  );
+    return (
+        <div className={styles.container}>
+            <Head>
+                <title>Create Next App</title>
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
+            {data}
+        </div>
+    );
 }
 
 const HomeWithAuthGuard = () => (
-  <AuthGuard>
-      <Home />
-  </AuthGuard>
+    <AuthGuard>
+        <Home />
+    </AuthGuard>
 );
 
 export default HomeWithAuthGuard;

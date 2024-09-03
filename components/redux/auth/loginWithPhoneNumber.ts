@@ -9,24 +9,28 @@ import { useAppSelector } from '../store';
 // Define constants for action types
 const ACTION_TYPE = {
     LOGIN: 'login',
-    SIGN_UP: 'sign-up'
+    SIGN_UP: 'sign-up',
 };
 
 // Create an async thunk for logging in with phone number
 export const loginWithPhoneNumber = createAsyncThunk(
     'loginPhone',
-    async (args: { type: typeof ACTION_TYPE[keyof typeof ACTION_TYPE];
-        phoneNumber: string,
-        recaptcha: RecaptchaVerifier | null,
-        callback: (
-            args:
-                | { type: 'success'; verificationId: string }
-                | {
-                      type: 'error';
-                      message: string;
-                  }
-        ) => void,
-    }, { dispatch }) => {
+    async (
+        args: {
+            type: (typeof ACTION_TYPE)[keyof typeof ACTION_TYPE];
+            phoneNumber: string;
+            recaptcha: RecaptchaVerifier | null;
+            callback: (
+                args:
+                    | { type: 'success'; verificationId: string }
+                    | {
+                          type: 'error';
+                          message: string;
+                      }
+            ) => void;
+        },
+        { dispatch }
+    ) => {
         try {
             // Validate phone number
             if (!isPhoneNumber(args.phoneNumber)) {
@@ -39,8 +43,7 @@ export const loginWithPhoneNumber = createAsyncThunk(
                 return;
             }
             // Validate recaptcha
-            if (args.recaptcha === null)
-            {
+            if (args.recaptcha === null) {
                 dispatch(
                     showToast({
                         message: 'Captcha is invalid',
@@ -50,14 +53,17 @@ export const loginWithPhoneNumber = createAsyncThunk(
                 return;
             }
             // Sign in with phone number
-            const confirmationCode = await signInWithPhoneNumber(firebaseAuth, args.phoneNumber, args.recaptcha);
+            const confirmationCode = await signInWithPhoneNumber(
+                firebaseAuth,
+                args.phoneNumber,
+                args.recaptcha
+            );
             // Callback on success
             if (args.callback)
                 args.callback({
                     type: 'success',
                     verificationId: confirmationCode.verificationId,
                 });
-
         } catch (e: any) {
             // Handle errors
             dispatch(

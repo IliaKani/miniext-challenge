@@ -13,7 +13,10 @@ import LoadingButton from '@/components/ui/LoadingButton';
 import SignUpModal from '@/components/ui/SignUpModal';
 import { loginWithEmail, useIsLoginWithEmailLoading } from '@/components/redux/auth/loginWithEmail';
 import { LoadingStateTypes } from '@/components/redux/types';
-import { loginWithPhoneNumber, useIsLoginWithPhoneNumberLoading } from '@/components/redux/auth/loginWithPhoneNumber';
+import {
+    loginWithPhoneNumber,
+    useIsLoginWithPhoneNumberLoading,
+} from '@/components/redux/auth/loginWithPhoneNumber';
 import {
     useVerifyPhoneNumberLoading,
     verifyPhoneNumber,
@@ -56,80 +59,91 @@ const LoginPage: NextPage = () => {
         }
     }, [email, password]);
 
-      // useEffect hook for realtime validation and recaptcha generation
+    // useEffect hook for realtime validation and recaptcha generation
     useEffect(() => {
-      // Enable submit button only if phoneNumber is entered and recaptcha is resolved
-      setDisableSubmitPhoneNumber(!(phoneNumber && recaptchaResolved));
+        // Enable submit button only if phoneNumber is entered and recaptcha is resolved
+        setDisableSubmitPhoneNumber(!(phoneNumber && recaptchaResolved));
 
-      // If phoneNumber is not entered or recaptcha is already generated, exit the function
-      if (!phoneNumber || recaptcha) return;
+        // If phoneNumber is not entered or recaptcha is already generated, exit the function
+        if (!phoneNumber || recaptcha) return;
 
-      // Create a new RecaptchaVerifier instance
-      const captcha = new RecaptchaVerifier(firebaseAuth, 'recaptcha-container-sign-in', {
-          size: 'compact',
-          // On recaptcha verification, set recaptchaResolved to true
-          callback: () => setRecaptchaResolved(true),
-          // On recaptcha expiration, set recaptchaResolved to false and show a toast message
-          'expired-callback': () => {
-              setRecaptchaResolved(false);
-              dispatch(showToast({ message: 'Recaptcha Expired, please verify it again', type: 'info' }));
-          },
-      });
+        // Create a new RecaptchaVerifier instance
+        const captcha = new RecaptchaVerifier(firebaseAuth, 'recaptcha-container-sign-in', {
+            size: 'compact',
+            // On recaptcha verification, set recaptchaResolved to true
+            callback: () => setRecaptchaResolved(true),
+            // On recaptcha expiration, set recaptchaResolved to false and show a toast message
+            'expired-callback': () => {
+                setRecaptchaResolved(false);
+                dispatch(
+                    showToast({
+                        message: 'Recaptcha Expired, please verify it again',
+                        type: 'info',
+                    })
+                );
+            },
+        });
 
-      // Render the recaptcha
-      captcha.render();
-      // Save the recaptcha instance for future use
-      setRecaptcha(captcha);
+        // Render the recaptcha
+        captcha.render();
+        // Save the recaptcha instance for future use
+        setRecaptcha(captcha);
     }, [phoneNumber, recaptchaResolved, recaptcha, dispatch]);
 
     // Function to validate the OTP entered by the user
     const ValidateOtp = useCallback(async () => {
-      // Dispatch the verifyPhoneNumber action with necessary parameters
-      dispatch(verifyPhoneNumber({
-          type: 'sign-up',
-          OTPCode,
-          auth: null,
-          verificationId,
-          // Callback function to refresh the page if OTP validation is successful
-          callback: (result) => {
-              if (result.type !== 'error') router.refresh();
-          },
-      }));
+        // Dispatch the verifyPhoneNumber action with necessary parameters
+        dispatch(
+            verifyPhoneNumber({
+                type: 'sign-up',
+                OTPCode,
+                auth: null,
+                verificationId,
+                // Callback function to refresh the page if OTP validation is successful
+                callback: (result) => {
+                    if (result.type !== 'error') router.refresh();
+                },
+            })
+        );
     }, [OTPCode, verificationId, dispatch, router]);
 
     // Signing in with email and password and redirecting to home page
     const signInWithEmail = useCallback(async () => {
-      await dispatch(loginWithEmail({
-          type: 'login',
-          auth: null,
-          email,
-          password,
-          callback: (result) => {
-              if (result.type === 'error') return;
-          },
-      }));
+        await dispatch(
+            loginWithEmail({
+                type: 'login',
+                auth: null,
+                email,
+                password,
+                callback: (result) => {
+                    if (result.type === 'error') return;
+                },
+            })
+        );
     }, [email, password, dispatch]);
 
     // Function to sign in with phone number
     const signInWithPhoneNumber = useCallback(async () => {
-      // Dispatch the loginWithPhoneNumber action with necessary parameters
-      dispatch(loginWithPhoneNumber({
-          type: 'login',
-          phoneNumber,
-          recaptcha,
-          // Callback function to handle the result of the login attempt
-          callback: (result) => {
-              // If there's an error, set recaptchaResolved to false and exit the function
-              if (result.type === 'error') {
-                  setRecaptchaResolved(false);
-                  return;
-              }
-              // If login is successful, save the verificationId and show the next step (e.g., OTP input)
-              setVerificationId(result.verificationId);
-              setShow(true);
-          },
-      }));
-    // Dependencies for useCallback hook
+        // Dispatch the loginWithPhoneNumber action with necessary parameters
+        dispatch(
+            loginWithPhoneNumber({
+                type: 'login',
+                phoneNumber,
+                recaptcha,
+                // Callback function to handle the result of the login attempt
+                callback: (result) => {
+                    // If there's an error, set recaptchaResolved to false and exit the function
+                    if (result.type === 'error') {
+                        setRecaptchaResolved(false);
+                        return;
+                    }
+                    // If login is successful, save the verificationId and show the next step (e.g., OTP input)
+                    setVerificationId(result.verificationId);
+                    setShow(true);
+                },
+            })
+        );
+        // Dependencies for useCallback hook
     }, [phoneNumber, recaptcha, dispatch]);
 
     if (auth.type === LoadingStateTypes.LOADING) {
@@ -142,7 +156,7 @@ const LoginPage: NextPage = () => {
     return (
         <div className="flex items-center justify-center min-h-full px-4 py-12 sm:px-6 lg:px-8">
             <div className="w-full max-w-md space-y-8">
-            <div>
+                <div>
                     <img
                         className="w-auto h-12 mx-auto"
                         src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
